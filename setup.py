@@ -32,7 +32,7 @@ setup(
     long_description=readme + '\n\n' + history,
     author='Will Roberts',
     author_email='wildwilhelm@gmail.com',
-    url='https://github.com/wroberts/wkr',
+    url='https://github.com/wroberts/wkr.py',
     packages=find_packages(include=['wkr']),
     include_package_data=True,
     install_requires=requirements,
