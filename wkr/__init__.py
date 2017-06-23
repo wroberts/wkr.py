@@ -48,7 +48,7 @@ def reduce_lists(lists):
 
     Equivalent to (though faster than)::
 
-        return reduce ( lambda a,b: a+b, lists, [] )
+        reduce(lambda a, b: a + b, lists, [])
     """
     retval = []
     for item in lists:
@@ -62,7 +62,7 @@ def reduce_sets_or(sets):
 
     Equivalent to (though faster than)::
 
-        return reduce ( lambda a,b: a|b, sets, set() )
+        reduce(lambda a, b: a | b, sets, set())
     """
     retval = set()
     for item in sets:

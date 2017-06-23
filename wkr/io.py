@@ -31,6 +31,9 @@ def open(filename, mode='rb'):
     normal files.  You can also open zip files using syntax like::
 
         f = utils.open_file('../semcor-parsed.zip:semcor000.txt')
+
+    :param str filename: The name of the file to open
+    :param str mode: The mode to open the file in (defaults to 'rb')
     """
     if (('r' not in mode or hasattr(filename, 'read')) and
         (('a' not in mode and 'w' not in mode) or
@@ -64,9 +67,8 @@ def lines(filename, encoding='utf-8'):
     """
     Open the named file and yield the lines inside it.
 
-    Arguments:
-    - `filename`:
-    - `encoding='utf-8'`:
+    :param str filename: The name of the file to open
+    :param str encoding: The encoding of the file (defaults to utf-8)
     """
     decode = lambda line: line  # noqa E731
     if encoding:
@@ -87,8 +89,8 @@ def read_counts(filename, encoding='utf-8'):
 
     The counts of repeated value lines will be summed together.
 
-    Arguments:
-    - `filename`:
+    :param str filename: The name of the file to open
+    :param str encoding: The encoding of the file (defaults to utf-8)
     """
     counter = Counter()
     for line in lines(filename, encoding):
