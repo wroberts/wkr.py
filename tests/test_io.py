@@ -21,12 +21,8 @@ def binary_file(tmpdir, request):
         output_file.write(BINARY_DATA)
     return path.strpath
 
-def test_read_xz(binary_file):
+def test_read_binary_file(binary_file):
     with wkr.open(binary_file, mode='rb') as input_file:
         data = input_file.read()
         assert isinstance(data, binary_type)
         assert data == BINARY_DATA
-    with wkr.open(binary_file, mode='r') as input_file:
-        data = input_file.read()
-        assert isinstance(data, text_type)
-        assert data == BINARY_DATA.decode('utf-8')

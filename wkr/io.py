@@ -23,7 +23,7 @@ except ImportError:
         pass
 
 
-def open(filename, mode='rb'):
+def open_file(filename, mode='rb'):
     """
     Open a file for access with the given mode.
 

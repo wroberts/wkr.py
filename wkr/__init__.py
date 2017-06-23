@@ -9,8 +9,8 @@ __init__.py
 (c) Will Roberts  23 June, 2017
 """
 
-from .io import lines, open   # noqa: F401
-from .os import mkdir_p       # noqa: F401
+from .io import lines, open_file as open   # noqa: F401
+from .os import mkdir_p                    # noqa: F401
 
 __author__ = """Will Roberts"""
 __email__ = 'wildwilhelm@gmail.com'
