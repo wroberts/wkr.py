@@ -2,17 +2,17 @@
 # -*- coding: utf-8 -*-
 """Update encrypted deploy password in Travis config file."""
 
-
 from __future__ import print_function
+
 import base64
 import json
 import os
 from getpass import getpass
+
 import yaml
-from cryptography.hazmat.primitives.serialization import load_pem_public_key
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.asymmetric.padding import PKCS1v15
-
+from cryptography.hazmat.primitives.serialization import load_pem_public_key
 
 try:
     from urllib import urlopen
@@ -60,8 +60,8 @@ def fetch_public_key(repo):
     keyurl = 'https://api.travis-ci.org/repos/{0}/key'.format(repo)
     data = json.loads(urlopen(keyurl).read().decode())
     if 'key' not in data:
-        errmsg = "Could not find public key for repo: {}.\n".format(repo)
-        errmsg += "Have you already added your GitHub repo to Travis?"
+        errmsg = 'Could not find public key for repo: {}.\n'.format(repo)
+        errmsg += 'Have you already added your GitHub repo to Travis?'
         raise ValueError(errmsg)
     return data['key']
 

@@ -3,7 +3,7 @@
 
 """The setup script."""
 
-from setuptools import setup, find_packages
+from setuptools import find_packages, setup
 
 with open('README.rst') as readme_file:
     readme = readme_file.read()
@@ -28,15 +28,15 @@ test_requirements = [
 setup(
     name='wkr',
     version='1.0.0',
-    description="Python utility library",
+    description='Python utility library',
     long_description=readme + '\n\n' + history,
-    author="Will Roberts",
+    author='Will Roberts',
     author_email='wildwilhelm@gmail.com',
     url='https://github.com/wroberts/wkr',
     packages=find_packages(include=['wkr']),
     include_package_data=True,
     install_requires=requirements,
-    license="MIT license",
+    license='MIT license',
     zip_safe=False,
     keywords='wkr',
     classifiers=[
@@ -44,7 +44,7 @@ setup(
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
         'Natural Language :: English',
-        "Programming Language :: Python :: 2",
+        'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.3',

@@ -5,7 +5,6 @@
 
 import pytest
 
-
 from wkr import wkr
 
 
