@@ -201,3 +201,34 @@ def test_read_counts(tmpdir):
                     u'{}\t{}\n'.format(count, key).encode('utf-8'))
         # read it back in
         assert wkr.io.read_counts(filename) == counter
+
+
+def test_read_counts_2(tmpdir):
+    """Test the wkr.io.read_counts method."""
+    # write the counter out to file
+    filename = tmpdir.join('counts.tsv').ensure().strpath
+    with open(filename, 'wb') as output_file:
+        output_file.write(b'2\ta\n')
+        output_file.write(b'4\tb\n')
+        output_file.write(b'1\tc\n')
+        output_file.write(b'3\ta\n')
+    # read it back in
+    assert wkr.io.read_counts(filename) == Counter('aabbbbcaaa')
+
+
+def test_read_counts_3(tmpdir):
+    """Test the wkr.io.read_counts method."""
+    # write the counter out to file
+    filename = tmpdir.join('counts.tsv').ensure().strpath
+    with open(filename, 'wb') as output_file:
+        output_file.write(b'2\ta\tb\n')
+        output_file.write(b'4\tb\tb\n')
+        output_file.write(b'1\tc\tb\n')
+        output_file.write(b'3\ta\ta\n')
+    # read it back in
+    assert wkr.io.read_counts(filename) == Counter(dict([
+        (('a','b'), 2),
+        (('b','b'), 4),
+        (('c','b'), 1),
+        (('a','a'), 3),
+    ]))
