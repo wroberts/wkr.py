@@ -12,7 +12,11 @@ import sys
 import zipfile
 from collections import Counter
 
-import lzma
+try:
+    import lzma
+except ImportError:
+    import backports.lzma as lzma
+
 import pytest
 
 import wkr
