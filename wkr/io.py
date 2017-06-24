@@ -45,7 +45,10 @@ def open_file(filename, mode='rb'):
         elif filename == '-' and ('w' in mode or 'a' in mode):
             return sys.stdout
         if filename.lower().count('.zip:'):
-            assert mode == 'r'
+            if 'r' not in mode:
+                raise Exception(
+                    'zip file syntax only supports reading from files')
+            mode = mode.replace('b', '')
             assert filename.count(':') == 1
             zipped_file = zipfile.ZipFile(filename.split(':')[0])
             unzipped_file = zipped_file.open(filename.split(':')[1], 'r')
