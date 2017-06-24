@@ -12,16 +12,18 @@ import sys
 import zipfile
 from collections import Counter
 
-try:
-    import lzma
-except ImportError:
-    import backports.lzma as lzma
-
 import pytest
 
 import wkr
 import wkr.io
 from wkr.compat import PY2, binary_type, chr, text_type
+
+try:
+    import lzma
+except ImportError:
+    import backports.lzma as lzma
+
+
 
 if PY2:
     try:
