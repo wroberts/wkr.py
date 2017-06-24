@@ -7,6 +7,7 @@ io.py
 (c) Will Roberts  23 June, 2017
 """
 
+import codecs
 import gzip
 import sys
 import zipfile
@@ -73,12 +74,13 @@ def lines(filename, encoding='utf-8'):
     :param str filename: The name of the file to open
     :param str encoding: The encoding of the file (defaults to utf-8)
     """
-    decode = lambda line: line  # noqa E731
-    if encoding:
-        decode = lambda line: line.decode(encoding)  # noqa E731
     with open(filename, 'rb') as input_file:
-        for line in input_file:
-            yield decode(line)
+        if encoding is not None:
+            stream = codecs.getreader(encoding)(input_file)
+        else:
+            stream = input_file
+        for line in stream:
+            yield line
 
 
 def read_counts(filename, encoding='utf-8'):
