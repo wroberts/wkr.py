@@ -9,6 +9,8 @@ __init__.py
 (c) Will Roberts  23 June, 2017
 """
 
+from __future__ import absolute_import
+
 from .io import lines, open_file as open   # noqa: F401
 from .os import mkdir_p                    # noqa: F401
 

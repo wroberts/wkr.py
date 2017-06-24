@@ -7,6 +7,8 @@ compat.py
 (c) Will Roberts  23 June, 2017
 """
 
+from __future__ import absolute_import
+
 import sys
 
 PY2 = int(sys.version[0]) == 2

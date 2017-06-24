@@ -7,6 +7,8 @@ os.py
 (c) Will Roberts  23 June, 2017
 """
 
+from __future__ import absolute_import
+
 import errno
 import os
 
