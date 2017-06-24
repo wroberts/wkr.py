@@ -7,6 +7,7 @@ import gzip
 import itertools
 import os
 import random
+import re
 import sys
 import zipfile
 from collections import Counter
@@ -174,7 +175,7 @@ def test_cannot_open_non_files():
 
 def test_lines_read(text_file, random_lines):
     """Test the wkr.lines method on reading text files."""
-    encoding = text_file.split('.')[1]
+    encoding = re.match(r'.+\.([^.]+)\.txt$', f).group(1)
     # read with string decoding
     expected_output = [line + u'\n' for line in random_lines]
     read_lines = list(wkr.lines(text_file, encoding))
