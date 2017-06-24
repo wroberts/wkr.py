@@ -3,8 +3,6 @@
 
 """Tests for `wkr.os` package."""
 
-import pytest
-
 from wkr.os import mkdir_p
 
 

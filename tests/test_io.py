@@ -233,8 +233,8 @@ def test_read_counts_3(tmpdir):
         output_file.write(b'3\ta\ta\n')
     # read it back in
     assert wkr.io.read_counts(filename) == Counter(dict([
-        (('a','b'), 2),
-        (('b','b'), 4),
-        (('c','b'), 1),
-        (('a','a'), 3),
+        (('a', 'b'), 2),
+        (('b', 'b'), 4),
+        (('c', 'b'), 1),
+        (('a', 'a'), 3),
     ]))
