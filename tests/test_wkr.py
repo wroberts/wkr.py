@@ -7,6 +7,7 @@ import itertools
 import random
 import string
 import timeit
+from functools import reduce
 
 import pytest
 
@@ -85,7 +86,6 @@ def test_memoize_correct():
 
 def test_memoize_fast():
     """Test that memoize speeds up a slow function."""
-    print __name__
     time = timeit.timeit(setup='from tests.test_wkr import fib, wkr; ',
                          stmt='fib(13)', number=10000)
     mtime = timeit.timeit(setup=('from tests.test_wkr import fib, wkr; '

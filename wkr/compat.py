@@ -19,9 +19,11 @@ if PY2:
     string_types = (str, unicode)  # noqa
     unicode = unicode  # noqa
     basestring = basestring  # noqa
+    chr = unichr
 else:
     text_type = str
     binary_type = bytes
     string_types = (str,)
     unicode = str
     basestring = (str, bytes)
+    chr = chr

@@ -16,22 +16,24 @@ import pytest
 
 import wkr
 import wkr.io
-from wkr.compat import PY2, binary_type, text_type
+from wkr.compat import PY2, binary_type, chr, text_type
 
 if PY2:
     try:
-        import cStringIO as StringIO
+        import cStringIO
+        BytesIO = cStringIO.StringIO
     except ImportError:
         import StringIO
+        BytesIO = StringIO.StringIO
 else:
-    from io import BytesIO as StringIO
+    from io import BytesIO as BytesIO
 
 BINARY_DATA = b'10011001'
 
 # some printable unicode characters
-WORD_CHARS = [unichr(x) for x in (range(0x21, 0x7f) +
-                                  range(0xa1, 0xad) +
-                                  range(0xae, 0x100))]
+WORD_CHARS = [chr(x) for x in (list(range(0x21, 0x7f)) +
+                               list(range(0xa1, 0xad)) +
+                               list(range(0xae, 0x100)))]
 
 
 @pytest.fixture
@@ -88,7 +90,7 @@ def zip_file(tmpdir):
     filename = tmpdir.join('test.zip').ensure().strpath
     with zipfile.ZipFile(filename, 'w') as archive:
         for num in range(1, 4):
-            contents = b'line {}'.format(num)
+            contents = u'line {}'.format(num).encode('ascii')
             contents += b'\n' + BINARY_DATA
             archive.writestr('file{}.txt'.format(num), contents)
     return filename
@@ -128,7 +130,7 @@ def test_read_zip_file(zip_file):
             assert isinstance(contents, binary_type)
             contents = contents.split(b'\n')
             assert len(contents) == 2
-            assert contents[0] == 'line {}'.format(num)
+            assert contents[0] == (u'line {}'.format(num)).encode('ascii')
             assert contents[1] == BINARY_DATA
 
 
@@ -180,7 +182,7 @@ def test_lines_read(text_file, random_lines):
     assert read_lines == expected_output
     # try reading without string decoding
     expected_output = list(
-        StringIO.StringIO((u'\n'.join(random_lines) + u'\n').encode(encoding)))
+        BytesIO((u'\n'.join(random_lines) + u'\n').encode(encoding)))
     read_lines = list(wkr.lines(text_file, None))
     assert all(isinstance(x, binary_type) for x in read_lines)
     assert read_lines == expected_output
