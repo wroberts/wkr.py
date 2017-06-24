@@ -6,16 +6,56 @@
 import gzip
 import itertools
 import os
+import random
 import sys
 import zipfile
+from collections import Counter
+
+try:
+    import cStringIO as StringIO
+except ImportError:
+    import StringIO
 
 import lzma
 import pytest
 
 import wkr
+import wkr.io
 from wkr.compat import binary_type, text_type
 
 BINARY_DATA = b'10011001'
+
+# some printable unicode characters
+WORD_CHARS = [unichr(x) for x in (range(0x21, 0x7f) +
+                                  range(0xa1, 0xad) +
+                                  range(0xae, 0x100))]
+
+
+@pytest.fixture
+def random_lines():
+    """Fixture to produce random unicode text."""
+    lines = []
+    for _ in range(random.randint(12, 24)):
+        line = []
+        for _ in range(random.randint(5, 13)):
+            word = u''.join([random.choice(WORD_CHARS)
+                             for _ in range(random.randint(3, 8))])
+            line.append(word)
+        line = u' '.join(line)
+        lines.append(line)
+    return lines
+
+
+@pytest.fixture(params=['latin-1', 'utf-8',
+                        'utf-16', 'utf-16le', 'utf-16be',
+                        'utf-32', 'utf-32le', 'utf-32be'])
+def text_file(tmpdir, random_lines, request):
+    """Fixture to produce a random text file."""
+    encoding = request.param
+    filename = tmpdir.join('text.{}.txt'.format(encoding)).ensure().strpath
+    with open(filename, 'wb') as output_file:
+        output_file.write((u'\n'.join(random_lines) + u'\n').encode(encoding))
+    return filename
 
 
 @pytest.fixture
@@ -125,3 +165,39 @@ def test_cannot_open_non_files():
     for (arg, mode) in itertools.product(args, modes):
         with pytest.raises(Exception):
             _ = wkr.open(arg, mode)  # noqa f841
+
+
+def test_lines_read(text_file, random_lines):
+    """Test the wkr.lines method on reading text files."""
+    encoding = text_file.split('.')[1]
+    # read with string decoding
+    expected_output = [line + u'\n' for line in random_lines]
+    read_lines = list(wkr.lines(text_file, encoding))
+    assert all(isinstance(x, text_type) for x in read_lines)
+    assert read_lines == expected_output
+    # try reading without string decoding
+    expected_output = list(
+        StringIO.StringIO((u'\n'.join(random_lines) + u'\n').encode(encoding)))
+    read_lines = list(wkr.lines(text_file, None))
+    assert all(isinstance(x, binary_type) for x in read_lines)
+    assert read_lines == expected_output
+
+
+def test_read_counts(tmpdir):
+    """Test the wkr.io.read_counts method."""
+    for size in [0, 1, 10, 100, 1000]:
+        # produce a Counter dictionary with random counts
+        counter = Counter()
+        for key in range(size):
+            key = 'key{}'.format(key)
+            count = random.randint(0, 10000)
+            counter[key] = count
+        assert len(counter) == size
+        # write the counter out to file
+        filename = tmpdir.join('counts.tsv').ensure().strpath
+        with open(filename, 'wb') as output_file:
+            for (key, count) in counter.items():
+                output_file.write(
+                    u'{}\t{}\n'.format(count, key).encode('utf-8'))
+        # read it back in
+        assert wkr.io.read_counts(filename) == counter
