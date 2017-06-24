@@ -11,17 +11,20 @@ import sys
 import zipfile
 from collections import Counter
 
-try:
-    import cStringIO as StringIO
-except ImportError:
-    import StringIO
-
 import lzma
 import pytest
 
 import wkr
 import wkr.io
-from wkr.compat import binary_type, text_type
+from wkr.compat import PY2, binary_type, text_type
+
+if PY2:
+    try:
+        import cStringIO as StringIO
+    except ImportError:
+        import StringIO
+else:
+    from io import BytesIO as StringIO
 
 BINARY_DATA = b'10011001'
 
