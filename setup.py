@@ -3,7 +3,11 @@
 
 """The setup script."""
 
+import sys
+
 from setuptools import find_packages, setup
+
+PY2 = int(sys.version[0]) == 2
 
 with open('README.rst') as readme_file:
     readme = readme_file.read()
@@ -14,6 +18,8 @@ with open('HISTORY.rst') as history_file:
 requirements = [
     # TODO: put package requirements here
 ]
+if PY2:
+    requirements.append('backports.lzma')
 
 setup_requirements = [
     'pytest-runner',
