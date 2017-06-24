@@ -97,7 +97,7 @@ def read_counts(filename, encoding='utf-8'):
     """
     counter = Counter()
     for line in lines(filename, encoding):
-        line = line.decode('utf-8').strip().split('\t')
+        line = line.strip().split('\t')
         cnt = int(line[0])
         value = tuple(line[1:])
         if len(value) == 1:
