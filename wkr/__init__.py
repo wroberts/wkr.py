@@ -28,8 +28,7 @@ def memoize(func):
 
     Taken from:
 
-    http://code.activestate.com/recipes/
-        578231-probably-the-fastest-memoization-decorator-in-the-/
+    http://code.activestate.com/recipes/578231-probably-the-fastest-memoization-decorator-in-the-/
     """
     class MemoDict(dict):
         def __init__(self, func):
