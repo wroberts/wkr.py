@@ -9,6 +9,10 @@ Will's Python Utilities
 .. image:: https://img.shields.io/travis/wroberts/wkr.py.svg
         :target: https://travis-ci.org/wroberts/wkr.py
 
+.. image:: https://coveralls.io/repos/wroberts/wkr.py/badge.svg?branch=master
+  :target: https://coveralls.io/r/wroberts/wkr.py?branch=master
+     :alt: Test code coverage
+
 .. image:: https://readthedocs.org/projects/wkr/badge/?version=latest
         :target: https://wkr.readthedocs.io/en/latest/?badge=latest
         :alt: Documentation Status
