@@ -85,7 +85,7 @@ def lines(filename, encoding='utf-8'):
             yield line
 
 
-def read_counts(filename, encoding='utf-8'):
+def load_counter(filename, encoding='utf-8'):
     """
     Load a tab-separated count file into a Counter structure.
 

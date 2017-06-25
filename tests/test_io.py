@@ -194,8 +194,8 @@ def test_lines_read(text_file, random_lines):
     assert read_lines == expected_output
 
 
-def test_read_counts(tmpdir):
-    """Test the wkr.io.read_counts method."""
+def test_load_counter(tmpdir):
+    """Test the wkr.io.load_counter method."""
     for size in [0, 1, 10, 100, 1000]:
         # produce a Counter dictionary with random counts
         counter = Counter()
@@ -211,11 +211,11 @@ def test_read_counts(tmpdir):
                 output_file.write(
                     u'{}\t{}\n'.format(count, key).encode('utf-8'))
         # read it back in
-        assert wkr.io.read_counts(filename) == counter
+        assert wkr.io.load_counter(filename) == counter
 
 
-def test_read_counts_2(tmpdir):
-    """Test the wkr.io.read_counts method."""
+def test_load_counter_2(tmpdir):
+    """Test the wkr.io.load_counter method."""
     # write the counter out to file
     filename = tmpdir.join('counts.tsv').ensure().strpath
     with open(filename, 'wb') as output_file:
@@ -224,11 +224,11 @@ def test_read_counts_2(tmpdir):
         output_file.write(b'1\tc\n')
         output_file.write(b'3\ta\n')
     # read it back in
-    assert wkr.io.read_counts(filename) == Counter('aabbbbcaaa')
+    assert wkr.io.load_counter(filename) == Counter('aabbbbcaaa')
 
 
-def test_read_counts_3(tmpdir):
-    """Test the wkr.io.read_counts method."""
+def test_load_counter_3(tmpdir):
+    """Test the wkr.io.load_counter method."""
     # write the counter out to file
     filename = tmpdir.join('counts.tsv').ensure().strpath
     with open(filename, 'wb') as output_file:
@@ -237,7 +237,7 @@ def test_read_counts_3(tmpdir):
         output_file.write(b'1\tc\tb\n')
         output_file.write(b'3\ta\ta\n')
     # read it back in
-    assert wkr.io.read_counts(filename) == Counter(dict([
+    assert wkr.io.load_counter(filename) == Counter(dict([
         (('a', 'b'), 2),
         (('b', 'b'), 4),
         (('c', 'b'), 1),
