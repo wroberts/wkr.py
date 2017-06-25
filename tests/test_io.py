@@ -24,7 +24,6 @@ except ImportError:
     import backports.lzma as lzma
 
 
-
 if PY2:
     try:
         import cStringIO
