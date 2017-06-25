@@ -2,6 +2,20 @@
 # This file will be regenerated if you run travis_pypi_setup.py
 
 language: python
+sudo: false
+cache:
+  directories:
+    - ~/.cache/pip
+env:
+  global:
+    - PIP_WHEEL_DIR=$HOME/.cache/pip/wheels
+    - PIP_FIND_LINKS=file://$HOME/.cache/pip/wheels
+addons:
+  apt:
+    packages:
+    - libatlas-dev
+    - libatlas-base-dev
+    - gfortran
 python:
   - 3.6
   - 3.5
@@ -9,8 +23,14 @@ python:
   - 3.3
   - 2.7
 
+before_install:
+  - pip install -U pip
+  - pip install wheel
+
 # command to install dependencies, e.g. pip install -r requirements.txt --use-mirrors
-install: pip install -U tox-travis pytest-cov coveralls pandas
+install:
+  - pip wheel tox-travis pytest-cov coveralls numpy pandas
+  - pip install -U tox-travis pytest-cov coveralls numpy pandas
 
 # command to run tests, e.g. python setup.py test
 script: tox
