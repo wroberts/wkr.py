@@ -3,6 +3,8 @@
 
 """Tests for `wkr.os` package."""
 
+import pytest
+
 from wkr.os import mkdir_p
 
 
@@ -31,3 +33,12 @@ def test_mkdir_p_exists(tmpdir):
     assert path.exists()
     assert path.isdir()
     mkdir_p(path.strpath)  # should not throw an exception
+
+
+def test_mkdir_p_file_exists(tmpdir):
+    """Test mkdir_p creating a directory that exists as a file."""
+    path = tmpdir.join('newfile').ensure(dir=False)
+    assert path.exists()
+    assert not path.isdir()
+    with pytest.raises(OSError):
+        mkdir_p(path.strpath)  # should throw an exception
