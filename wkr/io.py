@@ -76,7 +76,7 @@ def lines(filename, encoding='utf-8'):
     :param str filename: The name of the file to open
     :param str encoding: The encoding of the file (defaults to utf-8)
     """
-    with open(filename, 'rb') as input_file:
+    with open_file(filename, 'rb') as input_file:
         if encoding is not None:
             stream = codecs.getreader(encoding)(input_file)
         else:
