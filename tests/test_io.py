@@ -194,6 +194,18 @@ def test_lines_read(text_file, random_lines):
     assert read_lines == expected_output
 
 
+def test_lines_read_compressed(tmpdir, random_lines):
+    """Test that wkr.lines can read compressed files."""
+    # make a compressed file
+    path = tmpdir.join('text.gz').ensure().strpath
+    with wkr.open(path, 'wb') as output_file:
+        for line in random_lines:
+            output_file.write(line.encode('utf-8') + b'\n')
+    # now read it back in with wkr.lines()
+    loaded_lines = list(wkr.lines(path))
+    assert [[line.strip() for line in loaded_lines] == random_lines]
+
+
 def test_load_counter(tmpdir):
     """Test the wkr.io.load_counter method."""
     for size in [0, 1, 10, 100, 1000]:
