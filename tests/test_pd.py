@@ -66,3 +66,40 @@ def test_memoize_pandas_load(tmpdir):
 
         # remove the CSV file
         filename.remove()
+
+
+def test_memoize_pandas_parse_dates(tmpdir):
+    """Test `wkr.pd.memoize_pandas` on loading datetimes."""
+    filename = tmpdir.join('data.csv')
+
+    @pandas_memoize(filename.strpath)
+    def f():
+        return pd.DataFrame(
+            range(72),
+            columns=['count'],
+            index=pd.date_range('1/1/2011', periods=72, freq='H'))
+
+    assert not filename.exists()
+    df = f()
+    assert filename.exists()
+    df2 = f()
+
+    # DataFrames are equal even if their types aren't the same
+    assert df2.equals(df)
+    assert df2.index.dtype != df.index.dtype
+
+    @pandas_memoize(filename.strpath, parse_dates=True)
+    def f():
+        return pd.DataFrame(
+            range(72),
+            columns=['count'],
+            index=pd.date_range('1/1/2011', periods=72, freq='H'))
+
+    filename.remove()
+    assert not filename.exists()
+    df = f()
+    assert filename.exists()
+    df2 = f()
+
+    assert df2.equals(df)
+    assert df2.index.dtype == df.index.dtype
