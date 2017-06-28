@@ -158,7 +158,7 @@ def test_cannot_write_zip_file(zip_file):
     """Test that wkr.open cannot write to zip files."""
     modes = ['w', 'a', 'wb', 'ab']
     for mode in modes:
-        with pytest.raises(Exception):
+        with pytest.raises(ValueError):
             _ = wkr.open('{}:file1.txt'.format(zip_file), mode)  # noqa f841
 
 
@@ -174,7 +174,7 @@ def test_cannot_open_non_files():
         [1, 2, 3, 4],       # list
     ]
     for (arg, mode) in itertools.product(args, modes):
-        with pytest.raises(Exception):
+        with pytest.raises(TypeError):
             _ = wkr.open(arg, mode)  # noqa f841
 
 

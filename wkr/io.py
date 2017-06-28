@@ -49,7 +49,7 @@ def open_file(filename, mode='rb'):
             return sys.stdout
         if filename.lower().count('.zip:'):
             if 'r' not in mode:
-                raise Exception(
+                raise ValueError(
                     'zip file syntax only supports reading from files')
             mode = mode.replace('b', '')
             assert filename.count(':') == 1
@@ -66,7 +66,7 @@ def open_file(filename, mode='rb'):
         else:
             return open(filename, mode)
     else:
-        raise Exception('Unknown type for argument filename')
+        raise TypeError('Unknown type for argument filename')
 
 
 def lines(filename, encoding='utf-8'):
