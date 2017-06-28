@@ -53,8 +53,9 @@ def test_memoize_pandas_load(tmpdir):
             return df
 
         # now write to its CSV file a value that is different
-        df2 = pd.DataFrame({'x': range(40, 30, -1), 'y': range(20, 30)},
-                           index=range(5, 15))
+        df2 = pd.DataFrame({'x': list(range(40, 30, -1)),
+                            'y': list(range(20, 30))},
+                           index=list(range(5, 15)))
         assert not df2.equals(df)
         df2.to_csv(filename.strpath, encoding='utf-8')
         assert filename.exists()
@@ -75,7 +76,7 @@ def test_memoize_pandas_parse_dates(tmpdir):
     @pandas_memoize(filename.strpath)
     def f():
         return pd.DataFrame(
-            range(72),
+            list(range(72)),
             columns=['count'],
             index=pd.date_range('1/1/2011', periods=72, freq='H'))
 
@@ -91,7 +92,7 @@ def test_memoize_pandas_parse_dates(tmpdir):
     @pandas_memoize(filename.strpath, parse_dates=True)
     def f():
         return pd.DataFrame(
-            range(72),
+            list(range(72)),
             columns=['count'],
             index=pd.date_range('1/1/2011', periods=72, freq='H'))
 
