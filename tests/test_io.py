@@ -206,6 +206,20 @@ def test_lines_read_compressed(tmpdir, random_lines):
     assert [[line.strip() for line in loaded_lines] == random_lines]
 
 
+def test_count_lines(tmpdir, random_lines):
+    """Test the wkr.count_lines method."""
+    for num_lines in range(len(random_lines) + 1):
+        filename = tmpdir.join('text.txt')
+        assert not filename.exists()
+        with open(filename.strpath, 'wb') as output_file:
+            output_file.write(
+                (u'\n'.join(random_lines[:num_lines]) + u'\n').encode('utf-8'))
+        assert filename.exists()
+        assert wkr.io.count_lines(filename.strpath) == max(num_lines, 1)
+        filename.remove()
+        assert not filename.exists()
+
+
 def test_load_counter(tmpdir):
     """Test the wkr.io.load_counter method."""
     for size in [0, 1, 10, 100, 1000]:
