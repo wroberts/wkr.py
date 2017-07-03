@@ -11,7 +11,6 @@ from __future__ import absolute_import
 
 import codecs
 import gzip
-import mmap
 import sys
 import zipfile
 from collections import Counter
@@ -90,19 +89,12 @@ def count_lines(filename):
     """
     Count the number of lines in the given text file.
 
-    This is a copy of the "mapcount" function here:
-
-    https://stackoverflow.com/a/850962/1062499
-
     :param str filename:
     """
-    input_file = open(filename, 'r+')
-    buf = mmap.mmap(input_file.fileno(), 0)
-    lines = 0
-    readline = buf.readline
-    while readline():
-        lines += 1
-    return lines
+    num_lines = 0
+    for _ in lines(filename, encoding=None):
+        num_lines += 1
+    return num_lines
 
 
 def load_counter(filename, encoding='utf-8'):
