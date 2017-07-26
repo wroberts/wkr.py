@@ -83,6 +83,7 @@ def open_atomic(filepath, mode='w+b', fsync=False, **kwargs):
                 yield output_file
             finally:
                 if fsync:
+                    # TODO: this will not work with stdin/stdout, gzip, etc.
                     output_file.flush()
                     os.fsync(output_file.fileno())
         os.rename(tmppath, filepath)
