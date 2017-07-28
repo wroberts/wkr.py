@@ -18,6 +18,8 @@ import wkr
 import wkr.io
 from wkr.compat import PY2, binary_type, chr, text_type
 
+from .conftest import BINARY_DATA
+
 try:
     import lzma
 except ImportError:
@@ -34,7 +36,6 @@ if PY2:
 else:
     from io import BytesIO as BytesIO
 
-BINARY_DATA = b'10011001'
 
 # some printable unicode characters
 WORD_CHARS = [chr(x) for x in (list(range(0x21, 0x7f)) +
@@ -66,15 +67,6 @@ def text_file(tmpdir, random_lines, request):
     filename = tmpdir.join('text.{}.txt'.format(encoding)).ensure().strpath
     with open(filename, 'wb') as output_file:
         output_file.write((u'\n'.join(random_lines) + u'\n').encode(encoding))
-    return filename
-
-
-@pytest.fixture
-def binary_file(tmpdir):
-    """Fixture to produce a binary file on disk."""
-    filename = tmpdir.join('blob.bin').ensure().strpath
-    with open(filename, 'wb') as output_file:
-        output_file.write(BINARY_DATA)
     return filename
 
 
