@@ -9,8 +9,8 @@ import string
 
 import pytest
 
-from wkr.os import (backup_file, mkdir_p, open_atomic,
-                    temp_file_name, write_atomic)
+from wkr.os import (backup_file, mkdir_p, open_atomic, temp_file_name,
+                    write_atomic)
 
 
 def test_mkdir_p_single(tmpdir):
