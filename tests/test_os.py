@@ -70,8 +70,6 @@ def test_temp_file_name(tmpdir, tmpdir_suffix):
     with temp_file_name(suffix=tmpdir_suffix,
                         directory=tmpdir.strpath) as newpath:
         assert newpath.endswith(tmpdir_suffix)
-        # directory is not empty
-        assert tmpdir.listdir()
         # either the directory is empty and the file is not there, or
         # it is there and the directory is not empty, but the file is
         # empty
@@ -91,6 +89,18 @@ def test_temp_file_name(tmpdir, tmpdir_suffix):
     assert not tmpdir.listdir()
 
 
+def test_temp_file_name_delete(tmpdir):
+    """Test wkr.os.temp_file_name where we manually delete the tmpfile."""
+    with temp_file_name(directory=tmpdir.strpath) as newpath:
+        # write to the file
+        output_file = open(newpath, 'wb')
+        output_file.write(b'abcde')
+        output_file.close()
+        # delete the file
+        os.remove(output_file)
+    # should not raise an exception
+
+
 def test_open_atomic(tmpdir, binary_file):
     """Test wkr.os.open_atomic."""
     binary_path = tmpdir.__class__(binary_file)
@@ -102,7 +112,7 @@ def test_open_atomic(tmpdir, binary_file):
     backup_path = binary_path.new(basename=binary_path.basename + '~')
     assert not backup_path.exists()
     # now we do an atomic write on binary_file
-    with open_atomic(binary_file) as output_file:
+    with open_atomic(binary_file, fsync=True) as output_file:
         new_contents = b'abcde'
         assert new_contents != original_contents
         output_file.write(new_contents)
@@ -132,6 +142,21 @@ def test_backup_file(tmpdir, binary_file):
     assert binary_path.read(mode='rb') == original_contents
     assert backup_path.exists()
     assert backup_path.read(mode='rb') == original_contents
+
+
+def test_backup_file_exists(tmpdir, binary_file):
+    """Test wkr.os.backup_file where the backup file already exists."""
+    binary_path = tmpdir.__class__(binary_file)
+    # create the backup file and put something in it
+    backup_path = binary_path.new(basename=binary_path.basename + '~')
+    original_contents = b'abcde'
+    backup_path.ensure().write(original_contents)
+    # now do the backup
+    backup_file(binary_file)
+    # assert that the backup_path exists and that it contains the same
+    # content as the original file
+    assert backup_path.read(mode='rb') != original_contents
+    assert backup_path.read(mode='rb') == binary_path.read(mode='rb')
 
 
 def test_write_atomic(tmpdir, binary_file):
