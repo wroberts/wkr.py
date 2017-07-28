@@ -41,7 +41,6 @@ def temp_file_name(suffix='', directory=None):
     Will find a free temporary filename upon entering and will try to
     delete the file on leaving, even in case of an exception.
 
-    Arguments:
     :param str suffix: optional file suffix
     :param str directory: optional directory to save temporary file in
     """
@@ -72,9 +71,9 @@ def open_atomic(filepath, mode='w+b', fsync=False, **kwargs):
 
     The file will not be moved to destination in case of an exception.
 
-    :param int filepath: the file path to be opened
-    :param int fsync: whether to force write the file to disk
-    :param int **kwargs: Any valid keyword arguments for `open`
+    :param str filepath: the file path to be opened
+    :param bool fsync: whether to force write the file to disk
+    :param kwargs: Any valid keyword arguments for `open`
     """
     with temp_file_name(
             directory=os.path.dirname(os.path.abspath(filepath))) as tmppath:
