@@ -97,7 +97,7 @@ def test_open_atomic(tmpdir, binary_file):
     assert tmpdir.exists()
     assert binary_path.exists()
     assert binary_path.size()
-    original_contents = binary_path.read()
+    original_contents = binary_path.read(mode='rb')
     # backup file
     backup_path = binary_path.new(basename=binary_path.basename + '~')
     assert not backup_path.exists()
@@ -108,10 +108,10 @@ def test_open_atomic(tmpdir, binary_file):
         output_file.write(new_contents)
         output_file.flush()
         # at this point the original file still hasn't changed
-        assert binary_path.read() == original_contents
+        assert binary_path.read(mode='rb') == original_contents
     # now we close the file, and it's atomically moved into its final
     # location
-    assert binary_path.read() == new_contents
+    assert binary_path.read(mode='rb') == new_contents
 
 
 def test_backup_file(tmpdir, binary_file):
@@ -120,7 +120,7 @@ def test_backup_file(tmpdir, binary_file):
     assert tmpdir.exists()
     assert binary_path.exists()
     assert binary_path.size()
-    original_contents = binary_path.read()
+    original_contents = binary_path.read(mode='rb')
     # backup file
     backup_path = binary_path.new(basename=binary_path.basename + '~')
     assert not backup_path.exists()
@@ -129,9 +129,9 @@ def test_backup_file(tmpdir, binary_file):
     # assert that the backup_path exists and that it contains the same
     # content as the original file
     assert binary_path.exists()
-    assert binary_path.read() == original_contents
+    assert binary_path.read(mode='rb') == original_contents
     assert backup_path.exists()
-    assert backup_path.read() == original_contents
+    assert backup_path.read(mode='rb') == original_contents
 
 
 def test_write_atomic(tmpdir, binary_file):
@@ -140,7 +140,7 @@ def test_write_atomic(tmpdir, binary_file):
     assert tmpdir.exists()
     assert binary_path.exists()
     assert binary_path.size()
-    original_contents = binary_path.read()
+    original_contents = binary_path.read(mode='rb')
     # backup file
     backup_path = binary_path.new(basename=binary_path.basename + '~')
     assert not backup_path.exists()
@@ -151,7 +151,7 @@ def test_write_atomic(tmpdir, binary_file):
     # assert that the backup_path exists and that it contains the same
     # content as the original file
     assert backup_path.exists()
-    assert backup_path.read() == original_contents
+    assert backup_path.read(mode='rb') == original_contents
     # assert that the original file exists, with different contents
     assert binary_path.exists()
-    assert binary_path.read() == new_contents
+    assert binary_path.read(mode='rb') == new_contents
