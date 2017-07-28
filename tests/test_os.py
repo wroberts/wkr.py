@@ -97,7 +97,7 @@ def test_temp_file_name_delete(tmpdir):
         output_file.write(b'abcde')
         output_file.close()
         # delete the file
-        os.remove(output_file)
+        os.remove(newpath)
     # should not raise an exception
 
 
