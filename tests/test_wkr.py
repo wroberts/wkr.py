@@ -92,3 +92,29 @@ def test_memoize_fast():
                                  'mfib = wkr.memoize(fib)'),
                           stmt='mfib(13)', number=10000)
     assert mtime < time
+
+
+def test_rle():
+    """Test the wkr.rle method."""
+    assert list(wkr.rle([])) == []
+    assert list(wkr.rle([()])) == [((), 0, 1)]
+    assert list(wkr.rle([1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1])) == [
+        (1, 0, 4), (0, 4, 7), (1, 7, 13), (0, 13, 15), (1, 15, 16)]
+    assert list(wkr.rle([0, 1, 1, 1, 1, 0, 0, 0, 1, 1,
+                         1, 1, 1, 1, 0, 0, 1])) == [
+                             (0, 0, 1), (1, 1, 5), (0, 5, 8), (1, 8, 14),
+                             (0, 14, 16), (1, 16, 17)]
+    assert list(wkr.rle([1, 0, 1, 1, 1, 1, 0, 0, 0, 1,
+                         1, 1, 1, 1, 1, 0, 0, 1])) == [(1, 0, 1), (0, 1, 2),
+                                                       (1, 2, 6), (0, 6, 9),
+                                                       (1, 9, 15), (0, 15, 17),
+                                                       (1, 17, 18)]
+    assert list(wkr.rle([1, 0, 1, 1, 1, 1, 0, 0, 0, 1,
+                         1, 1, 1, 1, 1, 0, 0])) == [(1, 0, 1), (0, 1, 2),
+                                                    (1, 2, 6), (0, 6, 9),
+                                                    (1, 9, 15), (0, 15, 17)]
+    assert list(wkr.rle([True, False, True, True, True, True,
+                         False, False, False, True, True, True,
+                         True, True, True, False, False])) == [
+                             (True, 0, 1), (False, 1, 2), (True, 2, 6),
+                             (False, 6, 9), (True, 9, 15), (False, 15, 17)]

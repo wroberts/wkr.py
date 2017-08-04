@@ -69,3 +69,29 @@ def reduce_sets_or(sets):
     for item in sets:
         retval.update(item)
     return retval
+
+
+def rle(seq):
+    """
+    Run-length encode a sequence of values.
+
+    This implements a generator which yields tuples `(symbol, begin,
+    end)`.
+
+    `begin` and `end` are indices into the passed sequence, begin
+    inclusive and end exclusive.
+
+    :param iterable seq:
+    """
+    idx = None
+    for idx, symbol in enumerate(seq):
+        if idx == 0:
+            begin_symbol = symbol
+            begin_idx = idx
+        else:
+            if symbol != begin_symbol:
+                yield (begin_symbol, begin_idx, idx)
+                begin_symbol = symbol
+                begin_idx = idx
+    if idx is not None:
+        yield (begin_symbol, begin_idx, idx+1)
