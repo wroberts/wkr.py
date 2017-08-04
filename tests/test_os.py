@@ -93,9 +93,8 @@ def test_temp_file_name_delete(tmpdir):
     """Test wkr.os.temp_file_name where we manually delete the tmpfile."""
     with temp_file_name(directory=tmpdir.strpath) as newpath:
         # write to the file
-        output_file = open(newpath, 'wb')
-        output_file.write(b'abcde')
-        output_file.close()
+        with open(newpath, 'wb') as output_file:
+            output_file.write(b'abcde')
         # delete the file
         os.remove(newpath)
     # should not raise an exception
@@ -106,11 +105,8 @@ def test_open_atomic(tmpdir, binary_file):
     binary_path = tmpdir.__class__(binary_file)
     assert tmpdir.exists()
     assert binary_path.exists()
-    assert binary_path.size()
+    assert binary_path.size() > 0
     original_contents = binary_path.read(mode='rb')
-    # backup file
-    backup_path = binary_path.new(basename=binary_path.basename + '~')
-    assert not backup_path.exists()
     # now we do an atomic write on binary_file
     with open_atomic(binary_file, fsync=True) as output_file:
         new_contents = b'abcde'
@@ -164,7 +160,7 @@ def test_write_atomic(tmpdir, binary_file):
     binary_path = tmpdir.__class__(binary_file)
     assert tmpdir.exists()
     assert binary_path.exists()
-    assert binary_path.size()
+    assert binary_path.size() > 0
     original_contents = binary_path.read(mode='rb')
     # backup file
     backup_path = binary_path.new(basename=binary_path.basename + '~')
