@@ -98,6 +98,7 @@ def test_rle():
     """Test the wkr.rle method."""
     assert list(wkr.rle([])) == []
     assert list(wkr.rle([()])) == [((), 0, 1)]
+    assert list(wkr.rle('aaaaa')) == [('a', 0, 5)]
     assert list(wkr.rle([1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1])) == [
         (1, 0, 4), (0, 4, 7), (1, 7, 13), (0, 13, 15), (1, 15, 16)]
     assert list(wkr.rle([0, 1, 1, 1, 1, 0, 0, 0, 1, 1,
@@ -118,3 +119,6 @@ def test_rle():
                          True, True, True, False, False])) == [
                              (True, 0, 1), (False, 1, 2), (True, 2, 6),
                              (False, 6, 9), (True, 9, 15), (False, 15, 17)]
+    assert list(wkr.rle('aaAAaa')) == [('a', 0, 2), ('A', 2, 4), ('a', 4, 6)]
+    assert list(wkr.rle('aaAAaa', keyfunc=lambda x: x.lower())) == [
+        ('a', 0, 6)]
