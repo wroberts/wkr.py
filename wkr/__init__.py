@@ -71,7 +71,7 @@ def reduce_sets_or(sets):
     return retval
 
 
-def rle(seq):
+def rle(seq, keyfunc=None):
     """
     Run-length encode a sequence of values.
 
@@ -82,6 +82,8 @@ def rle(seq):
     inclusive and end exclusive.
 
     :param iterable seq:
+    :param function keyfunc: optional, a function to specify how
+        values should be grouped.  Defaults to lambda x: x.
     """
     idx = None
     for idx, symbol in enumerate(seq):
@@ -89,7 +91,11 @@ def rle(seq):
             begin_symbol = symbol
             begin_idx = idx
         else:
-            if symbol != begin_symbol:
+            if keyfunc is None:
+                unequal = (symbol != begin_symbol)
+            else:
+                unequal = keyfunc(symbol) != keyfunc(begin_symbol)
+            if unequal:
                 yield (begin_symbol, begin_idx, idx)
                 begin_symbol = symbol
                 begin_idx = idx
