@@ -9,8 +9,8 @@ import string
 
 import pytest
 
-from wkr.os import (backup_file, mkdir_p, open_atomic, temp_file_name,
-                    write_atomic)
+from wkr.os import (backup_file, mkdir_p, momentary_chdir, open_atomic,
+                    temp_file_name, write_atomic)
 
 
 def test_mkdir_p_single(tmpdir):
@@ -176,3 +176,25 @@ def test_write_atomic(tmpdir, binary_file):
     # assert that the original file exists, with different contents
     assert binary_path.exists()
     assert binary_path.read(mode='rb') == new_contents
+
+
+def test_momentary_chdir(tmpdir):
+    """Test wkr.os.momentary_chdir."""
+    start_dir = os.getcwd()
+    with momentary_chdir(tmpdir.strpath):
+        new_dir = os.getcwd()
+        assert new_dir != start_dir
+        assert new_dir == tmpdir.strpath
+    assert os.getcwd() == start_dir
+
+
+def test_momentary_chdir_fail(tmpdir):
+    """Test wkr.os.momentary_chdir."""
+    start_dir = os.getcwd()
+    path = tmpdir.join('newdir')
+    assert not path.exists()
+    with pytest.raises(OSError):
+        with momentary_chdir(path.strpath):
+            # this is never executed
+            assert False
+    assert os.getcwd() == start_dir

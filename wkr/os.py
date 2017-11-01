@@ -109,3 +109,19 @@ def write_atomic(lines, output_filename, backup=True):
     with open_atomic(output_filename, 'wb') as output_file:
         for line in lines:
             output_file.write(line)
+
+
+@contextmanager
+def momentary_chdir(path):
+    """
+    Context manager to temporarily change the working directory.
+
+    :param str path:
+    """
+    # record starting PWD
+    oldpwd = os.getcwd()
+    # change dir
+    os.chdir(path)
+    yield
+    # go back
+    os.chdir(oldpwd)
