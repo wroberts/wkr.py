@@ -33,7 +33,7 @@ def open_file(filename, mode='rb'):
     This function transparently wraps gzip and xz files as well as
     normal files.  You can also open zip files using syntax like::
 
-        f = utils.open_file('../semcor-parsed.zip:semcor000.txt')
+        f = wkr.io.open_file('../semcor-parsed.zip:semcor000.txt')
 
     :param str filename: The name of the file to open
     :param str mode: The mode to open the file in (defaults to 'rb')
