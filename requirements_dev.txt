@@ -12,5 +12,5 @@ pytest==3.8.1
 pytest-cov==2.6.0
 coveralls==1.5.1
 pytest-runner==4.2
-numpy==1.15.2
+numpy==1.16.1
 pandas==0.23.4
