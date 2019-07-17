@@ -11,6 +11,7 @@ from __future__ import absolute_import
 
 import codecs
 import gzip
+import pathlib
 import sys
 import zipfile
 from collections import Counter
@@ -38,6 +39,8 @@ def open_file(filename, mode='rb'):
     :param str filename: The name of the file to open
     :param str mode: The mode to open the file in (defaults to 'rb')
     """
+    if isinstance(filename, pathlib.PurePath):
+        filename = str(filename)
     if (('r' not in mode or hasattr(filename, 'read')) and
         (('a' not in mode and 'w' not in mode) or
          hasattr(filename, 'write')) and hasattr(filename, '__iter__')):
