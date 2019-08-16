@@ -101,3 +101,11 @@ def rle(seq, keyfunc=None):
                 begin_idx = idx
     if idx is not None:
         yield (begin_symbol, begin_idx, idx+1)
+
+
+# https://stackoverflow.com/a/312464/1062499
+def chunks(l, n):
+    """Yield successive n-sized chunks from l."""
+    l = list(l)
+    for i in range(0, len(l), n):
+        yield l[i:i + n]
