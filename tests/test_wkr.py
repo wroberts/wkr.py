@@ -122,3 +122,10 @@ def test_rle():
     assert list(wkr.rle('aaAAaa')) == [('a', 0, 2), ('A', 2, 4), ('a', 4, 6)]
     assert list(wkr.rle('aaAAaa', keyfunc=lambda x: x.lower())) == [
         ('a', 0, 6)]
+
+
+def test_first():
+    assert wkr.first(lambda x : x > 10, range(20)) == 11
+    with pytest.raises(StopIteration):
+        wkr.first(lambda x : x > 30, range(20))
+    assert wkr.first(lambda x : x > 30, range(20), None) is None

@@ -109,3 +109,21 @@ def chunks(l, n):
     l = list(l)
     for i in range(0, len(l), n):
         yield l[i:i + n]
+
+
+_NO_DEFAULT_VALUE_SENTINAL = {}
+def first(pred, seq, default=_NO_DEFAULT_VALUE_SENTINAL):
+    """
+    Get the first element of the iterable for which the given predicate
+    is true.
+
+    If `default` is specified, that value will be returned if there is
+    no matching element.
+    """
+    if default is not _NO_DEFAULT_VALUE_SENTINAL:
+        return next((x for x in seq if pred(x)), default)
+    try:
+        return next(x for x in seq if pred(x))
+    except StopIteration:
+        pass
+    raise StopIteration("No matching element found in first()")
