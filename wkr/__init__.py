@@ -11,12 +11,12 @@ __init__.py
 
 from __future__ import absolute_import
 
-from .io import lines, open_file as open   # noqa: F401
-from .os import mkdir_p                    # noqa: F401
+from .io import lines, open_file as open  # noqa: F401
+from .os import mkdir_p                   # noqa: F401
 
 __author__ = """Will Roberts"""
-__email__ = 'wildwilhelm@gmail.com'
-__version__ = '1.0.0'
+__email__ = "wildwilhelm@gmail.com"
+__version__ = "1.0.0"
 
 
 def memoize(func):
@@ -30,6 +30,7 @@ def memoize(func):
 
     http://code.activestate.com/recipes/578231-probably-the-fastest-memoization-decorator-in-the-/
     """
+
     class MemoDict(dict):
         def __init__(self, func):
             self.func = func
@@ -40,6 +41,7 @@ def memoize(func):
         def __missing__(self, key):
             ret = self[key] = self.func(*key)
             return ret
+
     return MemoDict(func)
 
 
@@ -92,7 +94,7 @@ def rle(seq, keyfunc=None):
             begin_idx = idx
         else:
             if keyfunc is None:
-                unequal = (symbol != begin_symbol)
+                unequal = symbol != begin_symbol
             else:
                 unequal = keyfunc(symbol) != keyfunc(begin_symbol)
             if unequal:
@@ -100,7 +102,7 @@ def rle(seq, keyfunc=None):
                 begin_symbol = symbol
                 begin_idx = idx
     if idx is not None:
-        yield (begin_symbol, begin_idx, idx+1)
+        yield (begin_symbol, begin_idx, idx + 1)
 
 
 # https://stackoverflow.com/a/312464/1062499
@@ -108,10 +110,20 @@ def chunks(l, n):
     """Yield successive n-sized chunks from l."""
     l = list(l)
     for i in range(0, len(l), n):
-        yield l[i:i + n]
+        yield l[i : i + n]
+
+
+# https://docs.python.org/3/library/itertools.html#itertools-recipes
+def pairwise(iterable):
+    "s -> (s0,s1), (s1,s2), (s2, s3), ..."
+    a, b = tee(iterable)
+    next(b, None)
+    return izip(a, b)
 
 
 _NO_DEFAULT_VALUE_SENTINAL = {}
+
+
 def first(pred, seq, default=_NO_DEFAULT_VALUE_SENTINAL):
     """
     Get the first element of the iterable for which the given predicate
