@@ -18,7 +18,7 @@ from .os import mkdir_p                   # noqa: F401
 
 __author__ = """Will Roberts"""
 __email__ = "wildwilhelm@gmail.com"
-__version__ = "1.0.0"
+__version__ = "1.0.1"
 
 
 def memoize(func):
