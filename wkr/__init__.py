@@ -11,6 +11,8 @@ __init__.py
 
 from __future__ import absolute_import
 
+from itertools import tee
+
 from .io import lines, open_file as open  # noqa: F401
 from .os import mkdir_p                   # noqa: F401
 
@@ -118,7 +120,7 @@ def pairwise(iterable):
     "s -> (s0,s1), (s1,s2), (s2, s3), ..."
     a, b = tee(iterable)
     next(b, None)
-    return izip(a, b)
+    return zip(a, b)
 
 
 _NO_DEFAULT_VALUE_SENTINAL = {}
