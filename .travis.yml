@@ -17,6 +17,7 @@ addons:
     - libatlas-base-dev
     - gfortran
 python:
+  - 3.7
   - 3.6
   - 3.5
   - 2.7
@@ -45,4 +46,4 @@ deploy:
   on:
     tags: true
     repo: wroberts/wkr
-    python: 2.7
+    python: 3.7
