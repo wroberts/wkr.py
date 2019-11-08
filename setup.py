@@ -19,7 +19,7 @@ requirements = [
     # TODO: put package requirements here
 ]
 if PY2:
-    requirements.extend(['backports.lzma', 'pathlib'[)
+    requirements.extend(['backports.lzma', 'pathlib'])
 
 setup_requirements = [
     'pytest-runner',
