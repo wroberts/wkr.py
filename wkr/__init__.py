@@ -20,7 +20,7 @@ from .os import mkdir_p
 
 __author__ = """Will Roberts"""
 __email__ = "wildwilhelm@gmail.com"
-__version__ = "1.0.1"
+__version__ = "1.0.2"
 
 
 def memoize(func):

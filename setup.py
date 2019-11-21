@@ -33,7 +33,7 @@ test_requirements = [
 
 setup(
     name='wkr',
-    version='1.0.1',
+    version='1.0.2',
     description='Python utility library',
     long_description=readme + '\n\n' + history,
     author='Will Roberts',
