@@ -11,10 +11,12 @@ __init__.py
 
 from __future__ import absolute_import
 
+from collections import defaultdict
 from itertools import tee
 
-from .io import lines, open_file as open  # noqa: F401
-from .os import mkdir_p                   # noqa: F401
+from .compat import string_types
+from .io import lines, open_file as open
+from .os import mkdir_p
 
 __author__ = """Will Roberts"""
 __email__ = "wildwilhelm@gmail.com"
@@ -121,6 +123,19 @@ def pairwise(iterable):
     a, b = tee(iterable)
     next(b, None)
     return zip(a, b)
+
+
+def groupby(iterable, key, container=list):
+    if isinstance(key, string_types):
+        key = (lambda k: lambda x: x[k])(key)
+    result = defaultdict(container)
+    for item in iterable:
+        value = key(item)
+        if hasattr(container, "add"):
+            result[value].add(item)
+        else:
+            result[value].append(item)
+    return result
 
 
 _NO_DEFAULT_VALUE_SENTINAL = {}

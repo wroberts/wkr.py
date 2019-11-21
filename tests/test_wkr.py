@@ -129,3 +129,24 @@ def test_first():
     with pytest.raises(StopIteration):
         wkr.first(lambda x : x > 30, range(20))
     assert wkr.first(lambda x : x > 30, range(20), None) is None
+
+
+def test_groupby():
+    assert dict(wkr.groupby(range(10), lambda x: x < 5)) == {
+        True: [0, 1, 2, 3, 4],
+        False: [5, 6, 7, 8, 9],
+    }
+    assert dict(wkr.groupby([], lambda x: x < 5)) == {}
+    test_list = [
+        {"type": "A", "value": 123},
+        {"type": "A", "value": 12},
+        {"type": "B", "value": 123},
+    ]
+    assert dict(wkr.groupby(test_list, "type")) == {
+        "A": [{"type": "A", "value": 123}, {"type": "A", "value": 12}],
+        "B": [{"type": "B", "value": 123}],
+    }
+    assert dict(wkr.groupby(test_list, "value")) == {
+        123: [{"type": "A", "value": 123}, {"type": "B", "value": 123}],
+        12: [{"type": "A", "value": 12}],
+    }
