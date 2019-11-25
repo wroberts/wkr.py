@@ -181,6 +181,30 @@ def test_first():
     assert wkr.first(lambda x: x > 30, range(20), None) is None
 
 
+def test_chunks():
+    assert list(wkr.chunks(range(10), 1)) == [
+        [0],
+        [1],
+        [2],
+        [3],
+        [4],
+        [5],
+        [6],
+        [7],
+        [8],
+        [9],
+    ]
+    assert list(wkr.chunks(range(10), 3)) == [[0, 1, 2], [3, 4, 5], [6, 7, 8], [9]]
+    assert list(wkr.chunks(range(10), 4)) == [[0, 1, 2, 3], [4, 5, 6, 7], [8, 9]]
+    with pytest.raises(ValueError):
+        wkr.chunks(range(10), 0)
+
+
+def test_pairwise():
+    assert list(wkr.pairwise([])) == []
+    assert list(wkr.pairwise(range(5))) == [(0, 1), (1, 2), (2, 3), (3, 4)]
+
+
 def test_groupby():
     assert dict(wkr.groupby(range(10), lambda x: x < 5)) == {
         True: [0, 1, 2, 3, 4],
@@ -199,4 +223,9 @@ def test_groupby():
     assert dict(wkr.groupby(test_list, "value")) == {
         123: [{"type": "A", "value": 123}, {"type": "B", "value": 123}],
         12: [{"type": "A", "value": 12}],
+    }
+    assert dict(wkr.groupby(range(10), lambda x: x % 3, container=set)) == {
+        0: {0, 3, 6, 9},
+        1: {1, 4, 7},
+        2: {2, 5, 8},
     }
