@@ -207,6 +207,10 @@ def test_pairwise():
 
 
 def test_groupby():
+    # must supply a key function to groupby
+    with pytest.raises(TypeError):
+        wkr.groupby(range(10))
+    # simple tests
     assert dict(wkr.groupby(range(10), lambda x: x < 5)) == {
         True: [0, 1, 2, 3, 4],
         False: [5, 6, 7, 8, 9],
@@ -230,6 +234,7 @@ def test_groupby():
         1: {1, 4, 7},
         2: {2, 5, 8},
     }
+    # test that groupby works with multiple key functions
     assert json.loads(
         json.dumps(wkr.groupby(range(10), lambda x: x % 2, lambda y: y % 3))
     ) == {
