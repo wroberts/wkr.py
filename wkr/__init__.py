@@ -11,11 +11,13 @@ __init__.py
 
 from __future__ import absolute_import
 
+import functools
 from collections import defaultdict
 from itertools import tee
 
 from .compat import string_types
-from .io import lines, open_file as open
+from .io import lines
+from .io import open_file as open
 from .os import mkdir_p
 
 __author__ = """Will Roberts"""
@@ -125,16 +127,42 @@ def pairwise(iterable):
     return zip(a, b)
 
 
-def groupby(iterable, key, container=list):
-    if isinstance(key, string_types):
-        key = (lambda k: lambda x: x[k])(key)
-    result = defaultdict(container)
+def groupby(iterable, *keys, **kwargs):
+    """
+    Groups objects from iterable into a dictionary structure.
+
+    :param iterable iterable: source of objects to sort
+    :param str or callable key: one or more functions to sort the object
+    :param callable container: Defaults to list.  You can pass "set" to this.
+    """
+    # pretend that we have a required second positional argument "key"
+    if not keys:
+        raise TypeError("groupby() missing 1 required positional argument: 'key'")
+    # pretend that we have a keyword argument "container" with a
+    # default value of list
+    container = kwargs.get("container", list)
+    # construct a nested defaultdict of the correct depth
+    # e.g., ddx(list)() is defaultdict(list, {}); ddx(ddx(list))() is
+    # defaultdict(lambda: defaultdict(list)); etc.
+    ddx = lambda x: lambda: defaultdict(x)
+    result = functools.reduce(lambda x, y: y(x), [ddx for _ in keys], container)()
+    # transform keys if necessary
+    keyfuncs = []
+    for key in keys:
+        if isinstance(key, string_types):
+            key = (lambda k: lambda x: x[k])(key)
+        keyfuncs.append(key)
+    # sort each item of the iterable into the result dictionary
     for item in iterable:
-        value = key(item)
-        if hasattr(container, "add"):
-            result[value].add(item)
+        pointer = result
+        # run down the key list
+        for keyfunc in keyfuncs:
+            value = keyfunc(item)
+            pointer = pointer[value]
+        if hasattr(pointer, "add"):
+            pointer.add(item)
         else:
-            result[value].append(item)
+            pointer.append(item)
     return result
 
 

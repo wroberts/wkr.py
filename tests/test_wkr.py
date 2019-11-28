@@ -4,6 +4,7 @@
 """Tests for `wkr.__init__` package."""
 
 import itertools
+import json
 import random
 import string
 import timeit
@@ -228,4 +229,10 @@ def test_groupby():
         0: {0, 3, 6, 9},
         1: {1, 4, 7},
         2: {2, 5, 8},
+    }
+    assert json.loads(
+        json.dumps(wkr.groupby(range(10), lambda x: x % 2, lambda y: y % 3))
+    ) == {
+        "0": {"0": [0, 6], "2": [2, 8], "1": [4]},
+        "1": {"1": [1, 7], "0": [3, 9], "2": [5]},
     }
