@@ -207,7 +207,7 @@ def humanise_bytes(num_bytes, si=False):
     thresh = int(math.pow(unit, exp) * (unit - 0.05))
     if exp < 6 and abs_bytes >= thresh - (52 if (thresh & 0xfff) == 0xd00 else 0):
         exp += 1
-    pre = ("kMGTPE" if si else "KMGTPE")[exp - 1] + ("i" if si else "")
+    pre = ("kMGTPE" if si else "KMGTPE")[exp - 1] + ("" if si else "i")
     if exp > 4:
         num_bytes /= unit
         exp -= 1
