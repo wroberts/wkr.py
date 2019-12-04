@@ -12,6 +12,7 @@ __init__.py
 from __future__ import absolute_import
 
 import functools
+import math
 from collections import defaultdict
 from itertools import tee
 
@@ -184,3 +185,30 @@ def first(pred, seq, default=_NO_DEFAULT_VALUE_SENTINAL):
     except StopIteration:
         pass
     raise StopIteration("No matching element found in first()")
+
+
+def humanise_bytes(num_bytes, si=False):
+    """
+    Make a human-readable string for a number of bytes
+
+    >>> humanise_bytes(689275)
+    '673.1 KB'
+
+    Taken from https://programming.guide/worlds-most-copied-so-snippet.html
+
+    :param int num_bytes:
+    :param int si: Whether to use SI units.  Defaults to False.
+    """
+    unit = 1000 if si else 1024
+    abs_bytes = abs(num_bytes)
+    if abs_bytes < unit:
+        return "{} B".format(num_bytes)
+    exp = int(math.log(abs_bytes) / math.log(unit))
+    thresh = int(math.pow(unit, exp) * (unit - 0.05))
+    if exp < 6 and abs_bytes >= thresh - (52 if (thresh & 0xfff) == 0xd00 else 0):
+        exp += 1
+    pre = ("kMGTPE" if si else "KMGTPE")[exp - 1] + ("i" if si else "")
+    if exp > 4:
+        num_bytes /= unit
+        exp -= 1
+    return "{:.1f} {}B".format(num_bytes / math.pow(unit, exp), pre)

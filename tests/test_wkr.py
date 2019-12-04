@@ -241,3 +241,32 @@ def test_groupby():
         "0": {"0": [0, 6], "2": [2, 8], "1": [4]},
         "1": {"1": [1, 7], "0": [3, 9], "2": [5]},
     }
+
+
+def test_humanise_bytes():
+    """
+    Test the wkr.humanise_bytes method.
+    """
+    assert wkr.humanise_bytes(1000, True) == "1.0 kiB"
+    assert wkr.humanise_bytes(1000 ** 2, True) == "1.0 MiB"
+    assert wkr.humanise_bytes(1000 ** 3, True) == "1.0 GiB"
+    assert wkr.humanise_bytes(1000 ** 4, True) == "1.0 TiB"
+    assert wkr.humanise_bytes(1000 ** 5, True) == "1.0 PiB"
+    assert wkr.humanise_bytes(1000 ** 6, True) == "1.0 EiB"
+    assert wkr.humanise_bytes(1000) == "1000 B"
+    assert wkr.humanise_bytes(1000 ** 2) == "976.6 KB"
+    assert wkr.humanise_bytes(1000 ** 3) == "953.7 MB"
+    assert wkr.humanise_bytes(1024) == "1.0 KB"
+    assert wkr.humanise_bytes(1024 ** 2) == "1.0 MB"
+    assert wkr.humanise_bytes(1024 ** 3) == "1.0 GB"
+    assert wkr.humanise_bytes(1024 ** 4) == "1.0 TB"
+    assert wkr.humanise_bytes(1024 ** 5) == "1.0 PB"
+    assert wkr.humanise_bytes(1024 ** 6) == "1.0 EB"
+    assert wkr.humanise_bytes(-100) == "-100 B"
+    assert wkr.humanise_bytes(0) == "0 B"
+    assert wkr.humanise_bytes(-0) == "0 B"
+    assert wkr.humanise_bytes(-5) == "-5 B"
+    assert wkr.humanise_bytes(999949, True) == "999.9 kiB"
+    assert wkr.humanise_bytes(999950, True) == "1.0 MiB"
+    with pytest.raises(TypeError):
+        assert wkr.humanise_bytes("a")
