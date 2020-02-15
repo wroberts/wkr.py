@@ -10,7 +10,7 @@ cryptography==2.7
 PyYAML==5.2b1
 pytest==4.6.3
 pytest-cov==2.7.1
-coveralls==1.8.2
+coveralls==1.11.1
 pytest-runner==4.4
 numpy==1.16.4
 pandas==0.24.2
