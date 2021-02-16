@@ -17,11 +17,9 @@ addons:
     - libatlas-base-dev
     - gfortran
 python:
+  - 3.9
   - 3.8
   - 3.7
-  - 3.6
-  - 3.5
-  - 2.7
 
 before_install:
   - pip install -U pip
