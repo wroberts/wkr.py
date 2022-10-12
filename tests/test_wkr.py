@@ -8,9 +8,11 @@ import json
 import random
 import string
 import timeit
+from collections import Counter
 from functools import reduce
 
 import pytest
+import scipy.stats
 
 import wkr
 
@@ -270,3 +272,13 @@ def test_humanise_bytes():
     assert wkr.humanise_bytes(999950, True) == "1.0 MB"
     with pytest.raises(TypeError):
         assert wkr.humanise_bytes("a")
+
+
+def test_reservoir_sampler():
+    """
+    Test wkr.ReservoirSampler.
+    """
+    c = Counter()
+    for it in range(1000):
+        c.update(wkr.ReservoirSampler.sample(7, range(100)))
+    assert scipy.stats.chisquare(list(c.values())).pvalue > 0.05
