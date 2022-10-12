@@ -6,7 +6,7 @@
 import pandas as pd
 import pytest
 
-from wkr.pd import pandas_memoize
+from wkr.pd import pandas_memoize_csv
 
 
 def dataframe_gen():
@@ -31,7 +31,7 @@ def test_memoize_pandas_save(tmpdir):
     for idx, df in enumerate(dataframe_gen()):
         filename = tmpdir.join("data{}.csv".format(idx))
 
-        @pandas_memoize(filename.strpath)
+        @pandas_memoize_csv(filename.strpath)
         def f():
             return df
 
@@ -49,7 +49,7 @@ def test_memoize_pandas_load(tmpdir):
         filename = tmpdir.join("data{}.csv".format(idx))
 
         # define a memoized function that returns a known value
-        @pandas_memoize(filename.strpath)
+        @pandas_memoize_csv(filename.strpath)
         def f():
             return df
 
@@ -76,7 +76,7 @@ def test_memoize_pandas_parse_dates(tmpdir):
     """Test `wkr.pd.memoize_pandas` on loading datetimes."""
     filename = tmpdir.join("data.csv")
 
-    @pandas_memoize(filename.strpath)
+    @pandas_memoize_csv(filename.strpath)
     def f():
         return pd.DataFrame(
             list(range(72)),
@@ -93,7 +93,7 @@ def test_memoize_pandas_parse_dates(tmpdir):
     assert df2.equals(df)
     assert df2.index.dtype != df.index.dtype
 
-    @pandas_memoize(filename.strpath, parse_dates=True)
+    @pandas_memoize_csv(filename.strpath, parse_dates=True)
     def f():
         return pd.DataFrame(
             list(range(72)),
