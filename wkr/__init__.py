@@ -113,11 +113,18 @@ def rle(seq, keyfunc=None):
 
 
 # https://stackoverflow.com/a/312464/1062499
-def chunks(l, n):
-    """Yield successive n-sized chunks from l."""
-    l = list(l)
-    for i in range(0, len(l), n):
-        yield l[i : i + n]
+def chunks(iterable, n):
+    """Yield successive `n`-sized chunks from `iterable`."""
+    if n <= 0:
+        raise ValueError("n must be a positive integer")
+    lval = []
+    for item in iterable:
+        lval.append(item)
+        if len(lval) == n:
+            yield lval
+            lval = []
+    if lval:
+        yield lval
 
 
 # https://docs.python.org/3/library/itertools.html#itertools-recipes
