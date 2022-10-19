@@ -224,6 +224,13 @@ def humanise_bytes(num_bytes, si=False):
     return "{:.1f} {}B".format(num_bytes / math.pow(unit, exp), pre)
 
 
+def shuffled(iterable):
+    """Returns a list containing the values of `iterable` in random order."""
+    list_val = list(iterable)
+    random.shuffle(list_val)
+    return list_val
+
+
 class ReservoirSampler:
     """
     https://en.wikipedia.org/wiki/Reservoir_sampling#Simple:_Algorithm_R
