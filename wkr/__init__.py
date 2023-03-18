@@ -13,8 +13,11 @@ from __future__ import absolute_import
 
 import functools
 import math
+import random
+import sys
 from collections import defaultdict
 from itertools import tee
+from typing import Any, Iterable, List
 
 from .compat import string_types
 from .io import lines
@@ -113,11 +116,18 @@ def rle(seq, keyfunc=None):
 
 
 # https://stackoverflow.com/a/312464/1062499
-def chunks(l, n):
-    """Yield successive n-sized chunks from l."""
-    l = list(l)
-    for i in range(0, len(l), n):
-        yield l[i : i + n]
+def chunks(iterable, n):
+    """Yield successive `n`-sized chunks from `iterable`."""
+    if n <= 0:
+        raise ValueError("n must be a positive integer")
+    lval = []
+    for item in iterable:
+        lval.append(item)
+        if len(lval) == n:
+            yield lval
+            lval = []
+    if lval:
+        yield lval
 
 
 # https://docs.python.org/3/library/itertools.html#itertools-recipes
@@ -212,3 +222,41 @@ def humanise_bytes(num_bytes, si=False):
         num_bytes /= unit
         exp -= 1
     return "{:.1f} {}B".format(num_bytes / math.pow(unit, exp), pre)
+
+
+def shuffled(iterable):
+    """Returns a list containing the values of `iterable` in random order."""
+    list_val = list(iterable)
+    random.shuffle(list_val)
+    return list_val
+
+
+class ReservoirSampler:
+    """
+    https://en.wikipedia.org/wiki/Reservoir_sampling#Simple:_Algorithm_R
+    """
+
+    eps = sys.float_info.epsilon
+
+    def __init__(self, n: int):
+        self.n = n
+        self.samples = []
+        self.num_observations = 0
+
+    def observe(self, item: Any) -> None:
+        self.num_observations += 1
+        # fill the reservoir
+        if len(self.samples) < self.n:
+            self.samples.append(item)
+            return
+        # replace elements with gradually decreasing probability
+        j = random.randint(1, self.num_observations)
+        if j <= self.n:
+            self.samples[j - 1] = item
+
+    @staticmethod
+    def sample(n: int, iterable: Iterable[Any]) -> List[Any]:
+        reservoir = ReservoirSampler(n)
+        for item in iterable:
+            reservoir.observe(item)
+        return reservoir.samples

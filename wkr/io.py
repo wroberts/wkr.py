@@ -9,6 +9,7 @@ io.py
 
 from __future__ import absolute_import
 
+import bz2
 import codecs
 import gzip
 import pathlib
@@ -27,7 +28,7 @@ except ImportError:
         pass
 
 
-def open_file(filename, mode='rb'):
+def open_file(filename, mode="rb"):
     """
     Open a file for access with the given mode.
 
@@ -41,45 +42,47 @@ def open_file(filename, mode='rb'):
     """
     if isinstance(filename, pathlib.PurePath):
         filename = str(filename)
-    if (('r' not in mode or hasattr(filename, 'read')) and
-        (('a' not in mode and 'w' not in mode) or
-         hasattr(filename, 'write')) and hasattr(filename, '__iter__')):
+    if (
+        ("r" not in mode or hasattr(filename, "read"))
+        and (("a" not in mode and "w" not in mode) or hasattr(filename, "write"))
+        and hasattr(filename, "__iter__")
+    ):
         return filename
-    elif isinstance(filename, basestring):
-        if filename == '-' and 'r' in mode:
-            return sys.stdin
-        elif filename == '-' and ('w' in mode or 'a' in mode):
-            return sys.stdout
-        if filename.lower().count('.zip:'):
-            if 'r' not in mode:
-                raise ValueError(
-                    'zip file syntax only supports reading from files')
-            mode = mode.replace('b', '')
-            assert filename.count(':') == 1
-            zipped_file = zipfile.ZipFile(filename.split(':')[0])
-            unzipped_file = zipped_file.open(filename.split(':')[1], 'r')
-            zipped_file.close()
-            return unzipped_file
-        elif filename.lower().endswith('.gz'):
-            return gzip.open(filename, mode)
-        elif filename.lower().endswith('.xz'):
-            tmp = lzma.LZMAFile(filename, mode)
-            dir(tmp)
-            return tmp
-        else:
-            return open(filename, mode)
+    if not isinstance(filename, basestring):
+        raise TypeError("Unknown type for argument filename")
+    if filename == "-" and "r" in mode:
+        return sys.stdin
+    elif filename == "-" and ("w" in mode or "a" in mode):
+        return sys.stdout
+    if filename.lower().count(".zip:"):
+        if "r" not in mode:
+            raise ValueError("zip file syntax only supports reading from files")
+        mode = mode.replace("b", "")
+        assert filename.count(":") == 1
+        zipped_file = zipfile.ZipFile(filename.split(":")[0])
+        unzipped_file = zipped_file.open(filename.split(":")[1], "r")
+        zipped_file.close()
+        return unzipped_file
+    elif filename.lower().endswith(".gz"):
+        return gzip.open(filename, mode)
+    elif filename.lower().endswith(".bz2"):
+        return bz2.open(filename, mode)
+    elif filename.lower().endswith(".xz"):
+        tmp = lzma.LZMAFile(filename, mode)
+        dir(tmp)
+        return tmp
     else:
-        raise TypeError('Unknown type for argument filename')
+        return open(filename, mode)
 
 
-def lines(filename, encoding='utf-8'):
+def lines(filename, encoding="utf-8"):
     """
     Open the named file and yield the lines inside it.
 
     :param str filename: The name of the file to open
     :param str encoding: The encoding of the file (defaults to utf-8)
     """
-    with open_file(filename, 'rb') as input_file:
+    with open_file(filename, "rb") as input_file:
         if encoding is not None:
             stream = codecs.getreader(encoding)(input_file)
         else:
@@ -100,7 +103,7 @@ def count_lines(filename):
     return num_lines
 
 
-def load_counter(filename, encoding='utf-8'):
+def load_counter(filename, encoding="utf-8"):
     """
     Load a tab-separated count file into a Counter structure.
 
@@ -116,7 +119,7 @@ def load_counter(filename, encoding='utf-8'):
     """
     counter = Counter()
     for line in lines(filename, encoding):
-        line = line.strip().split('\t')
+        line = line.strip().split("\t")
         cnt = int(line[0])
         value = tuple(line[1:])
         if len(value) == 1:
